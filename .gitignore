@@ -130,3 +130,5 @@ dmypy.json
 C:\Users\Shubham\Desktop\Python\EmployeePayroll\__pycache__
 C:\Users\Shubham\Desktop\Python\EmployeePayroll\.idea
 C:\Users\Shubham\Desktop\Python\EmployeePayroll\venv
+
+/.env
