@@ -60,19 +60,57 @@ class Operation:
         return id
 
     @staticmethod
-    def update_employee(id: int, emp=EmployeePydantic):
+    def update_employee_name(id, name):
         """
-        updating employees salary by their id
+        updating employees name by their id
         """
         try:
-            query = "update employee set Name = '%s', ProfileImage = '%s', Gender = '%s', " \
-                    "Department = '%s', Salary = '%d', StartDate = '%s', Notes = '%s' where id = %d" % \
-                    (emp.name, emp.profile_path, emp.gender, emp.department, emp.salary, emp.start_date, emp.notes, id)
+            query = "update employee set Name = '%s', where id=%d" % (id, name)
             db.execute(query)
             conn.con.commit()
             updated_detail = Operation.single_emp(id)
             return updated_detail
         except Exception as e:
             return "Employee id is not present"
-# emp=Operation()
-# emp.update_employee()
+
+    @staticmethod
+    def update_employee_salary(id: int, salary: int):
+        """
+        updating employees salary by their id
+        """
+        try:
+            query = "update employee set salary = '%d', where id=%d" % (id, salary)
+            db.execute(query)
+            conn.con.commit()
+            updated_detail = Operation.single_emp(id)
+            return updated_detail
+        except Exception as e:
+            return "Employee id is not present"
+
+    @staticmethod
+    def update_employee_department(id, department):
+        """
+        updating employees department by their id
+        """
+        try:
+            query = "update employee set department = '%s', where id=%d" % (id, department)
+            db.execute(query)
+            conn.con.commit()
+            updated_detail = Operation.single_emp(id)
+            return updated_detail
+        except Exception as e:
+            return "Employee id is not present"
+
+    @staticmethod
+    def update_employee_image(id, profile_path):
+        """
+        updating employees profile by their id
+        """
+        try:
+            query = "update employee set profile_path = '%s', where id=%d" % (id, profile_path)
+            db.execute(query)
+            conn.con.commit()
+            updated_detail = Operation.single_emp(id)
+            return updated_detail
+        except Exception as e:
+            return "Employee id is not present"

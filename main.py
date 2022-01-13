@@ -33,7 +33,7 @@ def get_employee_details():
 
 
 @app.get("/one_employee")
-def get_single_employee(id:int):
+def get_single_employee(id: int):
     """
         getting single employee detail
     """
@@ -42,7 +42,7 @@ def get_single_employee(id:int):
 
         logging.info("Got employee detail")
         logging.debug(f"Employee Details are : {detail}")
-        return detail, {"status": 400, "message": "Successfully accessed employees info"}
+        return detail, {"status": 200, "message": "Successfully accessed employees info"}
     except Exception as e:
         logging.error(f"Error:{e}")
         return {"status": 404, "message": f"Error:{e}"}
@@ -60,21 +60,68 @@ def delete_employee_details(id: int):
         return {"status": 200, "message": "Successfully Deleted The Employee Details", "deleted_id": deleted_id}
     except Exception as e:
         logging.error(f"Error:{e}")
-        return {"status": 200, "message": f"Error:{e}"}
+        return {"status": 400, "message": f"Error:{e}"}
 
 
-@app.put("/updating")
-def update_employee_salary(id: int, salary:int):
+@app.put("/updating_salary")
+def update_employee_salary(id: int, salary: int):
     """
         updating employee salary using id
     """
     try:
         Operation.single_emp(id)
-        updated_details = Operation.update_employee(id, salary)
-        return updated_details,{"status": 200, "message": f"Employee {id} updated successfully", "data": updated_details}
+        updated_details = Operation.update_employee_salary(id, salary)
+        return updated_details, {"status": 200, "message": f"Employee {id} updated successfully",
+                                 "data": updated_details}
     except Exception as e:
         logging.error(f"Error:{e}")
-        return {"status": 200, "message": f"Error :{e}"}
+        return {"status": 400, "message": f"Error :{e}"}
+
+
+@app.put("/updating_name")
+def update_employee_name(id: int, name: str):
+    """
+        updating employee name using id
+    """
+    try:
+        Operation.single_emp(id)
+        updated_details = Operation.update_employee_name(id, name)
+        return updated_details, {"status": 200, "message": f"Employee {id} updated successfully",
+                                 "data": updated_details}
+    except Exception as e:
+        logging.error(f"Error:{e}")
+        return {"status": 400, "message": f"Error :{e}"}
+
+
+@app.put("/updating_department")
+def update_employee_department(id: int, department: str):
+    """
+        updating employee department using id
+    """
+    try:
+        Operation.single_emp(id)
+        updated_details = Operation.update_employee_department(id, department)
+        return updated_details, {"status": 200, "message": f"Employee {id} updated successfully",
+                                 "data": updated_details}
+    except Exception as e:
+        logging.error(f"Error:{e}")
+        return {"status": 400, "message": f"Error :{e}"}
+
+
+@app.put("/updating_profile")
+def update_employee_profile(id: int, profile_path: str):
+    """
+        updating employee profile using id
+    """
+    try:
+        Operation.single_emp(id)
+        updated_details = Operation.update_employee_image(id, profile_path)
+        return updated_details, {"status": 200, "message": f"Employee {id} updated successfully",
+                                 "data": updated_details}
+    except Exception as e:
+        logging.error(f"Error:{e}")
+        return {"status": 400, "message": f"Error :{e}"}
+
 
 
 @app.post("/add_employee")
@@ -84,7 +131,7 @@ def add_employee_details(emp: EmployeePydantic):
     """
     try:
         employee_details = Operation.add_employee(emp.id, emp.name, emp.profile_path, emp.gender, emp.department,
-                                                  emp.salary,emp.start_date, emp.notes)
+                                                  emp.salary, emp.start_date, emp.notes)
         logging.info("Successfully Added Employee Details")
         logging.debug(f"Employee Details are : {employee_details}")
         token_id = JwtHandler.encode_token(emp.id)
@@ -103,7 +150,7 @@ def login(token: str = Header(None)):
     try:
         token_id = JwtHandler.decode_token(token)
         checking_in_db = Operation.single_emp(token_id)
-        return {"status": 404, "message": "logged in", "data": checking_in_db}
+        return {"status": 200, "message": "logged in", "data": checking_in_db}
     except Exception as e:
         logging.error(f"Error : {e}")
-        return {"status": 205, "message": "Not authorized"}
+        return {"status": 404, "message": "Not authorized"}
